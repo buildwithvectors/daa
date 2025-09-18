@@ -49,11 +49,35 @@
   .summary h2 { margin: 0 0 8px; font-size: 16px }
   .grade-select { font-size: 16px; font-weight: 700 }
   .grade-select:focus { outline: 2px solid var(--accent); outline-offset: 1px }
+  .table td.center, .table th.center { text-align: center }
+  .policy .note { color: var(--muted); font-size: 13px; margin-top: 6px }
+  header .policy { max-width: 420px; display: inline-block; }
+  .policy table { font-size: 12px }
+  .policy table th, .policy table td { text-align: center }
+  .table.compact th, .table.compact td { padding: 6px; font-size: 13px }
+  .summary h2 { margin: 0 0 8px; font-size: 16px }
+  .grade-select { font-size: 16px; font-weight: 700; border-width: 2px }
+  .grade-select:focus { outline: 2px solid var(--accent); outline-offset: 1px }
+  @media (max-width: 640px) {
+    header { padding: 16px 12px }
+    h1 { font-size: 20px }
+    .controls { position: sticky; top: 0; z-index: 20; background: var(--bg); padding: 12px 0; border-bottom: 1px solid var(--border) }
+    button { min-height: 44px; font-size: 16px }
+    input[type="text"], select { min-height: 44px; font-size: 16px }
+    .table thead { display: none }
+    .table tr { display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'course grade' 'ap credits'; gap: 10px; padding: 8px 0; }
+    .table td { border: 0; padding: 0 }
+    .table td::before { content: attr(data-label); display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px }
+    .table td[data-label="Course name"] { grid-area: course }
+    .table td[data-label="Letter grade"] { grid-area: grade }
+    .table td[data-label="AP/IB"] { grid-area: ap }
+    .table td[data-label="Credits"] { grid-area: credits }
+  }
 </style>
 </head>
 <body>
   <header>
-    <h1>High School GPA Calculator</h1>
+    <h1>DAA High School GPA Calculator</h1>
     <div class="policy" aria-label="Grading policy table">
       <strong>Grading policy</strong>
       <table>
@@ -170,14 +194,14 @@
             <tbody>
               ${Array.from({ length: rowsPerSemester }).map((_, i) => `
                 <tr>
-                  <td><input type="text" inputmode="text" placeholder="Course ${i+1}" /></td>
-                  <td>
+                  <td data-label="Course name"><input type="text" inputmode="text" placeholder="Course ${i+1}" /></td>
+                  <td data-label="Letter grade">
                     <select class="grade-select" aria-label="Grade for course ${i+1}">
                       ${optionHTML()}
                     </select>
                   </td>
-                  <td class="center"><input type="checkbox" aria-label="AP/IB course for course ${i+1}"></td>
-                  <td class="center">
+                  <td class="center" data-label="AP/IB"><input type="checkbox" aria-label="AP/IB course for course ${i+1}"></td>
+                  <td class="center" data-label="Credits">
                     <label><input type="radio" name="${sem.id}-cr-${i+1}" value="0.5" checked> 0.5</label>
                     <label style="margin-left:8px;"><input type="radio" name="${sem.id}-cr-${i+1}" value="0.25"> 0.25</label>
                   </td>

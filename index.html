@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>High School GPA Calculator</title>
+  <style>
+    :root {
+      --bg: #f7f7f9;
+      --card: #ffffff;
+      --text: #111111;
+      --muted: #666666;
+      --accent: #0f62fe;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif; margin: 0; background: var(--bg); color: var(--text); line-height: 1.4 }
+    header { padding: 24px 16px; text-align: center }
+    h1 { margin: 0 0 8px; font-size: 24px }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 16px 40px }
+    .controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 16px 0 24px }
+    button { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); cursor: pointer }
+    button.primary { background: var(--accent); color: #fff; border-color: var(--accent) }
+    .grid { display: flex; flex-direction: column; gap: 16px }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.04) }
+    .card h2 { margin: 0 0 12px; font-size: 18px }
+    .table { width: 100%; border-collapse: collapse }
+    .table th, .table td { border-bottom: 1px solid var(--border); padding: 8px }
+    .table th { font-weight: 600; text-align: left; font-size: 13px; color: var(--muted) }
+    input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 10px; background: #fff }
+    select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 10px; background: #fff }
+    .semester-summary { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 14px; color: var(--muted) }
+    .results { position: sticky; bottom: 0; background: transparent; padding: 8px 0; margin-top: 24px }
+    .results .box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; gap: 8px }
+    .badge { padding: 2px 8px; border-radius: 999px; background: #eef2ff; color: #1e40af; font-weight: 600 }
+    .policy { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-top: 8px }
+    .policy table { width: 100%; border-collapse: collapse }
+    .policy th, .policy td { border-bottom: 1px solid var(--border); padding: 6px 8px; font-size: 13px }
+    footer { max-width: 1000px; margin: 32px auto 48px; color: var(--muted); padding: 0 16px }
+    @media (max-width: 600px) { .table th:nth-child(1), .table td:nth-child(1) { width: 60% } }
+      .table td.center, .table th.center { text-align: center }
+    .policy .note { color: var(--muted); font-size: 13px; margin-top: 6px }
+    .table td.center, .table th.center { text-align: center }
+  .policy .note { color: var(--muted); font-size: 13px; margin-top: 6px }
+  header .policy { max-width: 420px; display: inline-block; }
+  .policy table { font-size: 12px }
+  .policy table th, .policy table td { text-align: center }
+  .table.compact th, .table.compact td { padding: 6px; font-size: 13px }
+  .summary h2 { margin: 0 0 8px; font-size: 16px }
+  .grade-select { font-size: 16px; font-weight: 700 }
+  .grade-select:focus { outline: 2px solid var(--accent); outline-offset: 1px }
+</style>
+</head>
+<body>
+  <header>
+    <h1>High School GPA Calculator</h1>
+    <div class="policy" aria-label="Grading policy table">
+      <strong>Grading policy</strong>
+      <table>
+        <thead>
+          <tr><th>Letter</th><th>Points</th><th>Percent</th></tr>
+        </thead>
+        <tbody>
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+      <div class="note">AP/IB weighting: +0.25 GPA points per course. GPA is credit-weighted.</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <button id="calc" class="primary">Calculate GPA</button>
+      <button id="clear">Clear all</button>
+    </div>
+
+    <div class="card summary" aria-label="GPA summary">
+      <h2>Summary</h2>
+      <table class="table compact">
+        <thead>
+          <tr><th>Period</th><th class="center">GPA</th><th class="center">Credits</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>G9 S1</td><td class="center" id="sum-g9s1-gpa">—</td><td class="center" id="sum-g9s1-cred">0</td></tr>
+          <tr><td>G9 S2</td><td class="center" id="sum-g9s2-gpa">—</td><td class="center" id="sum-g9s2-cred">0</td></tr>
+          <tr><td><strong>G9 Year</strong></td><td class="center" id="sum-g9-year-gpa">—</td><td class="center" id="sum-g9-year-cred">0</td></tr>
+          <tr><td>G10 S1</td><td class="center" id="sum-g10s1-gpa">—</td><td class="center" id="sum-g10s1-cred">0</td></tr>
+          <tr><td>G10 S2</td><td class="center" id="sum-g10s2-gpa">—</td><td class="center" id="sum-g10s2-cred">0</td></tr>
+          <tr><td><strong>G10 Year</strong></td><td class="center" id="sum-g10-year-gpa">—</td><td class="center" id="sum-g10-year-cred">0</td></tr>
+          <tr><td>G11 S1</td><td class="center" id="sum-g11s1-gpa">—</td><td class="center" id="sum-g11s1-cred">0</td></tr>
+          <tr><td>G11 S2</td><td class="center" id="sum-g11s2-gpa">—</td><td class="center" id="sum-g11s2-cred">0</td></tr>
+          <tr><td><strong>G11 Year</strong></td><td class="center" id="sum-g11-year-gpa">—</td><td class="center" id="sum-g11-year-cred">0</td></tr>
+          <tr><td><strong>All Semesters</strong></td><td class="center" id="sum-all-gpa">—</td><td class="center" id="sum-all-cred">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid" id="semesters"></div>
+
+    <div class="results" aria-live="polite">
+      <div class="box">
+        <div><strong>Cumulative GPA</strong></div>
+        <div><span class="badge" id="cumulativeGpa">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer></footer>
+
+  <script>
+    const gradeScale = [
+      {letter: "A+", points: 4.0, percent: "97–100"},
+      {letter: "A",  points: 4.0, percent: "93–96"},
+      {letter: "A-", points: 3.7, percent: "90–92"},
+      {letter: "B+", points: 3.3, percent: "87–89"},
+      {letter: "B",  points: 3.0, percent: "83–86"},
+      {letter: "B-", points: 2.7, percent: "80–82"},
+      {letter: "C+", points: 2.3, percent: "77–79"},
+      {letter: "C",  points: 2.0, percent: "73–76"},
+      {letter: "C-", points: 1.7, percent: "70–72"},
+      {letter: "D+", points: 1.3, percent: "67–69"},
+      {letter: "D",  points: 1.0, percent: "65–66"},
+      {letter: "D-", points: 0.5, percent: "Below 65"},
+      {letter: "F",  points: 0.0, percent: "Below 60"},
+    ];
+
+    const gradeToPoints = Object.fromEntries(gradeScale.map(x => [x.letter, x.points]));
+
+    const semesters = [
+      {id: "g9s1",  title: "Grade 9 — Semester 1"},
+      {id: "g9s2",  title: "Grade 9 — Semester 2"},
+      {id: "g10s1", title: "Grade 10 — Semester 1"},
+      {id: "g10s2", title: "Grade 10 — Semester 2"},
+      {id: "g11s1", title: "Grade 11 — Semester 1"},
+      {id: "g11s2", title: "Grade 11 — Semester 2"},
+    ];
+
+    const pastelBg = ['#F1F8FF','#F7FFF1','#FFF7F1','#F9F5FF','#F1FFFE','#FFF1F6'];
+
+    const rowsPerSemester = 8; // change if you need more/less rows
+
+    function buildPolicyTable(){
+      const tbody = document.querySelector('.policy tbody');
+      gradeScale.forEach(g => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${g.letter}</td><td>${g.points.toFixed(1)}</td><td>${g.percent}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function optionHTML(){
+      const opts = ['<option value="">Select</option>'];
+      gradeScale.forEach(g => opts.push(`<option value="${g.letter}">${g.letter}</option>`));
+      return opts.join('');
+    }
+
+    function buildSemesters(){
+      const container = document.getElementById('semesters');
+      semesters.forEach((sem, idx) => {
+        const card = document.createElement('section');
+        card.className = 'card';
+        card.id = sem.id;
+        card.style.background = pastelBg[idx % pastelBg.length];
+        card.innerHTML = `
+          <h2>${sem.title}</h2>
+          <table class="table" aria-label="${sem.title}">
+            <thead>
+              <tr><th>Course name</th><th>Letter grade</th><th class="center">AP/IB</th><th class="center">Credits</th></tr>
+            </thead>
+            <tbody>
+              ${Array.from({ length: rowsPerSemester }).map((_, i) => `
+                <tr>
+                  <td><input type="text" inputmode="text" placeholder="Course ${i+1}" /></td>
+                  <td>
+                    <select class="grade-select" aria-label="Grade for course ${i+1}">
+                      ${optionHTML()}
+                    </select>
+                  </td>
+                  <td class="center"><input type="checkbox" aria-label="AP/IB course for course ${i+1}"></td>
+                  <td class="center">
+                    <label><input type="radio" name="${sem.id}-cr-${i+1}" value="0.5" checked> 0.5</label>
+                    <label style="margin-left:8px;"><input type="radio" name="${sem.id}-cr-${i+1}" value="0.25"> 0.25</label>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="semester-summary">
+            <span>Courses <span class="badge" id="${sem.id}-count">0</span></span>
+            <span>Credits <span class="badge" id="${sem.id}-credits">0</span></span>
+            <span>Semester GPA <span class="badge" id="${sem.id}-gpa">—</span></span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function calculateAll(){
+      let totalPoints = 0;
+      let totalCredits = 0;
+      const semResults = {};
+
+      semesters.forEach(sem => {
+        const section = document.getElementById(sem.id);
+        const rows = section.querySelectorAll('tbody tr');
+        let sumPoints = 0, sumCredits = 0, count = 0;
+        rows.forEach(row => {
+          const sel = row.querySelector('select');
+          const ap = row.querySelector('input[type="checkbox"]');
+          const creditInput = row.querySelector('input[type="radio"]:checked');
+          const credits = creditInput ? parseFloat(creditInput.value) : 0.5;
+          const letter = sel && sel.value.trim();
+          if (letter && (letter in gradeToPoints)){
+            const apBump = ap && ap.checked ? 0.25 : 0;
+            sumPoints += (gradeToPoints[letter] + apBump) * credits;
+            sumCredits += credits;
+            count += 1;
+          }
+        });
+        const gpa = sumCredits ? (sumPoints / sumCredits) : null;
+        document.getElementById(`${sem.id}-count`).textContent = count;
+        document.getElementById(`${sem.id}-credits`).textContent = sumCredits.toFixed(2);
+        document.getElementById(`${sem.id}-gpa`).textContent = gpa === null ? '—' : gpa.toFixed(2);
+        document.getElementById(`sum-${sem.id}-gpa`).textContent = gpa === null ? '—' : gpa.toFixed(2);
+        document.getElementById(`sum-${sem.id}-cred`).textContent = sumCredits.toFixed(2);
+        semResults[sem.id] = { points: sumPoints, credits: sumCredits };
+        totalPoints += sumPoints;
+        totalCredits += sumCredits;
+      });
+
+      const cum = totalCredits ? (totalPoints / totalCredits) : null;
+      document.getElementById('cumulativeGpa').textContent = cum === null ? '—' : cum.toFixed(2);
+
+      const groups = { g9: ['g9s1','g9s2'], g10: ['g10s1','g10s2'], g11: ['g11s1','g11s2'] };
+      function updateYearSummary(key){
+        const ids = groups[key];
+        let p = 0, c = 0;
+        ids.forEach(id => { if (semResults[id]) { p += semResults[id].points; c += semResults[id].credits; } });
+        const g = c ? (p/c) : null;
+        document.getElementById(`sum-${key}-year-gpa`).textContent = g === null ? '—' : g.toFixed(2);
+        document.getElementById(`sum-${key}-year-cred`).textContent = c.toFixed(2);
+      }
+      updateYearSummary('g9');
+      updateYearSummary('g10');
+      updateYearSummary('g11');
+      document.getElementById('sum-all-gpa').textContent = cum === null ? '—' : cum.toFixed(2);
+      document.getElementById('sum-all-cred').textContent = totalCredits.toFixed(2);
+    }
+
+    function clearAll(){
+      document.querySelectorAll('input[type=text]').forEach(i => i.value = '');
+      document.querySelectorAll('select').forEach(s => s.value = '');
+      document.querySelectorAll('input[type=checkbox]').forEach(c => c.checked = false);
+      document.querySelectorAll('input[type=radio]').forEach(r => r.checked = (r.value === '0.5'));
+      document.querySelectorAll('.badge').forEach(b => {
+        if (b.id.endsWith('-count')) b.textContent = '0';
+        else if (b.id.endsWith('-gpa')) b.textContent = '—';
+      });
+      document.getElementById('cumulativeGpa').textContent = '—';
+      document.querySelectorAll('[id^="sum-"][id$="-gpa"]').forEach(e => e.textContent = '—');
+      document.querySelectorAll('[id^="sum-"][id$="-cred"]').forEach(e => e.textContent = '0');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildPolicyTable();
+      buildSemesters();
+      document.getElementById('calc').addEventListener('click', calculateAll);
+      document.getElementById('clear').addEventListener('click', clearAll);
+    });
+  </script>
+</body>
+</html>

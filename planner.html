@@ -231,7 +231,27 @@
     $(document).ready(function () {
       buildTimeline();
       populateTable();
-      $('#info-table').DataTable({ pageLength: 2000 });
+      const table = $('#info-table').DataTable({ pageLength: 2000 });
+	  // unique category list
+const categories = [...new Set(tips.map(t => t.category))].sort();
+
+// A) add a dropdown in the Category header (exact match filter)
+const catCol = table.column(0);
+const $select = $('<select style="width:100%"><option value="">Category</option></select>')
+  .on('change', function () {
+    const v = $.fn.dataTable.util.escapeRegex($(this).val());
+    catCol.search(v ? '^' + v + '$' : '', true, false).draw();
+  });
+categories.forEach(c => $select.append(`<option value="${c}">${c}</option>`));
+$(catCol.header()).empty().append($select);
+
+// B) add category suggestions to the global search (still free text)
+const dlId = 'category-datalist';
+const $dl = $(`<datalist id="${dlId}"></datalist>`);
+categories.forEach(c => $dl.append(`<option value="${c}">`));
+$('body').append($dl);
+$('#info-table_filter input').attr('list', dlId);
+
     });
   </script>
 </body>

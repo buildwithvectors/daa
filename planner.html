@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IB + College Planner</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <style>
+    :root {
+      --bg: #f7f7f9;
+      --card: #ffffff;
+      --text: #111111;
+      --muted: #666666;
+      --accent: #0f62fe;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box }
+    body { font-family: system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); }
+    header { padding: 20px; text-align: center; background: var(--card); border-bottom: 1px solid var(--border); }
+    h1 { margin: 0; font-size: 24px }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px }
+    .timeline { margin-bottom: 40px }
+    .timeline h2 { font-size: 20px; margin-bottom: 12px }
+    .months { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) }
+    .month { position: relative; border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: white; }
+    .head { font-size: 13px; font-weight: 700; margin-bottom: 8px; padding: 4px 6px; border-radius: 6px; display: inline-block; color: white; background: var(--accent) }
+    .event { background: #fff; border: 1px solid var(--border); border-left-width: 5px; border-radius: 8px; padding: 6px 8px; margin: 6px 0; font-size: 13px }
+    .event small { display: block; color: var(--muted) }
+    table.dataTable thead th { background: #f3f4f6; color: #333 }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IB + College Application Planner</h1>
+  </header>
+  <main class="container">
+    <section class="timeline">
+      <h2>Timeline (2024–2026)</h2>
+      <div class="months" id="months"></div>
+    </section>
+    <section>
+      <h2>Organized Tips and Milestones</h2>
+      <table id="info-table" class="display" style="width:100%">
+        <thead>
+          <tr><th>Category</th><th>Detail</th></tr>
+        </thead>
+        <tbody id="info-table-body"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+    const timelineEvents = [
+      { date: '2024-10-01', title: 'PSAT (Grade 11)' },
+      { date: '2024-12-01', title: 'EE Subject Declared' },
+      { date: '2025-01-01', title: 'EE Topic Approval + Supervisor Assigned' },
+      { date: '2025-02-01', title: 'TOK Exhibition Starts + IB Coursework Deadlines Announced' },
+      { date: '2025-03-01', title: 'TOK Exhibition Final Due' },
+      { date: '2025-04-01', title: 'TOK Exhibition Final Due' },
+      { date: '2025-06-30', title: 'Pre-predicts Released' },
+      { date: '2025-08-01', title: 'TMUA Registration Opens' },
+      { date: '2025-09-01', title: 'EE Draft Due + UCAS Counselor Confirmation' },
+      { date: '2025-10-01', title: 'EE Final Due + UCAS October 15 Deadline' },
+      { date: '2025-11-01', title: 'November Predicts Released' },
+      { date: '2026-01-10', title: 'IB Mocks + TMUA (If Required)' },
+      { date: '2026-01-14', title: 'UCAS Equal Consideration Closes' },
+      { date: '2026-01-29', title: 'UCAS Final January Deadline' },
+      { date: '2026-02-14', title: 'UCAS Equal Consideration Closes' },
+      { date: '2026-03-15', title: 'CAS Submission & Final IA Work' }
+    ];
+
+    // Color scheme by year
+    const yearColors = {
+      2024: '#60a5fa',  // Blue
+      2025: '#fbbf24',  // Amber
+      2026: '#a78bfa'   // Purple
+    };
+
+    function buildTimeline() {
+      const byMonth = {};
+      timelineEvents.forEach(e => {
+        const month = e.date.slice(0, 7);
+        if (!byMonth[month]) byMonth[month] = [];
+        byMonth[month].push(e);
+      });
+      
+      const container = document.getElementById('months');
+      Object.entries(byMonth).forEach(([month, events]) => {
+        const box = document.createElement('div');
+        box.className = 'month';
+        const d = new Date(month + '-01T00:00:00');
+        const label = d.toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+        const year = d.getFullYear();
+        const yearColor = yearColors[year] || '#666666'; // Default gray if year not found
+        
+        const head = document.createElement('div');
+        head.className = 'head';
+        head.textContent = label;
+        head.style.background = yearColor;
+        box.appendChild(head);
+        
+        events.forEach(ev => {
+          const e = document.createElement('div');
+          e.className = 'event';
+          e.style.borderLeftColor = yearColor;
+          e.innerHTML = `<strong>${ev.title}</strong><small>${new Date(ev.date).toLocaleDateString()}</small>`;
+          box.appendChild(e);
+        });
+        container.appendChild(box);
+      });
+    }
+
+    const tips = [
+      { category: "Grade 9", detail: "Fulfill Fine Arts requirement in G9/G10 for IB eligibility" },
+      { category: "Grade 9", detail: "Check HL prerequisites if major is known" },
+      { category: "Grade 9", detail: "Keep log of activities, awards, leadership for personal statement & counselor" },
+      { category: "Grade 9", detail: "For 9th and 10th grade math and science Kokab is highly recommended +971 55 992 2964" },
+      { category: "Grade 9", detail: "If possible summer between 9th & 10th try to enrol student in a summer leadership camp" },
+      { category: "Grade 9", detail: "For school without walls encourage student to register for a service trip. It looks good on college application." },
+      { category: "Grade 9", detail: "Go through the common app and ucas app for tips on how to write the personal statement and try to encourage your student to do extracurriculars in & out of school and to choose subjects in course selection that would eventually answer the questions that need to be answered in their college essays." },
+      { category: "Grade 10", detail: "Use UCAS course search to match IB HLs to major requirements" },
+      { category: "Grade 10", detail: "Start with external mentor/counselor if needed before course selection" },
+      { category: "Grade 10", detail: "Try your best to attend the meetings set by the counseling department in order to understand dates and what is required from student." },
+      { category: "Grade 10", detail: "Make sure to read the junior and senior handbook in order to know what is expected from the student with regards to the college application process. Please keep in mind the student is expected to do the research and also know the requirements and deadlines not the school counselor." },
+      { category: "Grade 10", detail: "Even if you have an external college counselor your student still needs to build a relationship with their school counselor because they will be the ones writing the counselor recommendation and also they will be the ones who send necessary documents requested by the university from the school so at least try to meet twice each semester in order to form a connection and understand the school policies." },
+      { category: "Grade 10", detail: "See #4 under resources below because she can explain to u how she provides full support from A to Z to IB students. Ask her to send you the pdf file explaining what she does." },
+      { category: "Grade 10", detail: "If possible summer between 10th and 11th grade try to enrol student in pre college program and if not try to take online courses." },
+      { category: "Grade 10", detail: "For school trip if you can't arrange private college tours during ur vacation try to enrol student in one of the university tours." },
+      { category: "Grade 11", detail: "Book SAT, IELTS, TOEFL early. Use same email as PSAT" },
+      { category: "Grade 11", detail: "Complete CAS regularly on ManageBac: 1 per month, 3 reflections each" },
+      { category: "Grade 11", detail: "Choose EE topic related to intended major and secure supervisor early" },
+      { category: "Grade 11", detail: "Book SAT suggested dates that seem to be the most convenient December term 1 & March term 2. When u book with student email it automatically places u at DAA for a center but incase it doesn't use the DAA SAT code 52822" },
+      { category: "Grade 11", detail: "Take SAT course through https://www.collegeboard.org and use the student email and same password that was used to create the account when they did the psat." },
+      { category: "Grade 11", detail: "Book Ielts or Toefl or whatever English proficiency test may be required" },
+      { category: "Grade 11", detail: "Book any exam required by potential list of universities. Check for specific tests your student may need to take depending on their major and country." },
+      { category: "Grade 11", detail: "Try to complete CAS project with the reflections and goal on managebac" },
+      { category: "Grade 11", detail: "Try to complete at least one CAS a month with the reflections and goal on managebac. For each CAS activity your student would need to write a goal, 3 reflections and upload evidence. For the CAS project they would need to write 5 reflections and a goal and upload evidence. So it would be more efficient to do this regularly and keep record rather than all at once and maybe forget to add it. It is time consuming so better to do it in small doses over time and to try and complete most of it grade 11. Contact the CAS supervisor for updated details on CAS requirements since sometimes they change." },
+      { category: "Grade 11", detail: "Anything done before grade 11 IB is not counted for the IB CAS." },
+      { category: "Grade 11", detail: "Paid internships cannot be included in CAS but unpaid ones can be included." },
+      { category: "Grade 11", detail: "Anything that is requested during core make sure the student submits it like even the EE" },
+      { category: "Grade 11", detail: "When choosing the EE topic try to encourage student to make it related to their major because it shows interest in the major and this can be mentioned in the personal statement." },
+      { category: "Grade 11", detail: "As soon as students have to ask their chosen subject teacher for their EE to be their supervisor encourage them to get approval because the dedicated EE supervisors for each subject are limited with the number of students they can accept to supervise so the sooner they request approval the more likely the teacher will accept to be their supervisor." },
+      { category: "Grade 11", detail: "Always read SPOTS HS section for IB dates & Counseling grade 12 newsletter." },
+      { category: "Grade 11", detail: "For senior spirit gear try to order the first batch and select home delivery so it's ready for your senior before school starts." },
+      { category: "Grade 11", detail: "Make sure to at least get one white polo shirt because kids love to get friends' signatures at the end of year." },
+      { category: "Grade 11 Summer", detail: "Finish EE, Math IA draft, College Essays, internships, IAs due in Sep" },
+      { category: "Grade 11 Summer", detail: "Check your student's passport to see when it expires and try to renew it so it is valid for the whole period of study abroad to avoid unnecessary visa complications or the need of passport renewal while ur student is in university. You Dont have to but it saves u from unnecessary headache." },
+      { category: "Grade 11 Summer", detail: "Complete the Extended Essay" },
+      { category: "Grade 11 Summer", detail: "Complete the Math IA draft" },
+      { category: "Grade 11 Summer", detail: "Complete any IA's due in September" },
+      { category: "Grade 11 Summer", detail: "Complete the college essays" },
+      { category: "Grade 11 Summer", detail: "Internship" },
+      { category: "Grade 12", detail: "Confirm predicted grades with all IB teachers for Oct 15 UCAS deadline" },
+      { category: "Grade 12", detail: "Book TMUA if required. Dates are October and January" },
+      { category: "Grade 12", detail: "Complete any remaining CAS" },
+      { category: "Grade 12", detail: "Keep ahead with IB due dates schedule to avoid clash with majors & college applications" },
+      { category: "Grade 12", detail: "Book TMUA test if required by any of UK universities planning to apply to. Usually dates are October term 1 and January term 2 but January kids have mocks also. Beginning of August check for registration deadlines." },
+      { category: "College Apps", detail: "Use personal email (not school) for UCAS & Common App" },
+      { category: "College Apps", detail: "Complete counselor & teacher rec forms early Term 2 G11" },
+      { category: "College Apps", detail: "Commit to long-term volunteering or leadership aligned with major" },
+      { category: "College Apps", detail: "Book college meeting with counselor" },
+      { category: "College Apps", detail: "February of term 1 grade 11 when teacher letter recommendation and counselor letter research commendation forms and brag sheets are sent out, make sure to complete by deadlines because teachers or counselors may change the year after so better to have someone who knows ur student fill them out. Keep in mind the brag sheet and the junior questionnaire take time to fill." },
+      { category: "College Apps", detail: "Try for student to enrol in a school club or something related to the major preferably something that shows leadership." },
+      { category: "College Apps", detail: "Try for student to commit to volunteering outside of school like with The Giving Family or with anything on the list recommended by counseling office or external counselor. Not just to be a one time thing." },
+      { category: "Tutors", detail: "SAT: Eden, Hashmat Khan, Unihawk; Math: Joe, Mr. Khaled, Yasha" },
+      { category: "Tutors", detail: "Numbers center near DAA. Either Rania or Tolga. Contact through Ms Leen at Numbers +971 52 790 6688 to arrange booking." },
+      { category: "Tutors", detail: "Joe +961 3 542 042 (he is amazing but he sets the times)" },
+      { category: "Tutors", detail: "Ms Yasha at Unihawk center. To book her you have to contact the schedule manager Krishan +971 50 574 0179." },
+      { category: "Tutors", detail: "IB and AP math tutor Mather Chafer +82 10-9664-9231" },
+      { category: "Tutors", detail: "Diana Ciacoi +971 52 524 2462" },
+      { category: "Tutors", detail: "Mr Khaled +971 58 880 0861" },
+      { category: "Tutors", detail: "Eden : +971 50 272 3756" },
+      { category: "Tutors", detail: "Hashmat khan : +971 50 494 6968 (lots of ASD and DAA students recommend)" },
+      { category: "Tutors", detail: "Radhika: +971 50 926 7126" },
+      { category: "Tutors", detail: "Deborah : +971 50 358 6403" },
+      { category: "Tutors", detail: "Dana: +971 56 374 6091" },
+      { category: "Tutors", detail: "Noor :0521375991" },
+      { category: "Tutors", detail: "Unihawk center, booking make through Krishan who is the schedule manager +971 50 574 0179" },
+      { category: "Tutors", detail: "kauronlineeducation@gmail.com WhatsApp: 00971501177286" },
+      { category: "Resources", detail: "Coursera/Unifrog courses – complete 2 related to major" },
+      { category: "Resources", detail: "Revision village is a good IB resource most subjects, past papers, practice, predicted mock questions https://www.revisionvillage.com" },
+      { category: "Resources", detail: "Alfredo books (IB past papers to buy) Available Delivery door to door🚗🌹 Alefredo Books Order Now 🇦🇪 ☎️00971526573800 Instagram page: https://instagram.com/alefredobooks.uae Website page: https://uae.alefredobooks.com" },
+      { category: "Resources", detail: "Dare insights education : (u contact her to arrange tutors online) she meets with u online to understand your needs. +971 52 725 9415" },
+      { category: "Resources", detail: "EPLC IB tutoring / mentoring (highly suggest before end of grade 10) to contact and at least see what she can provide for your future IB student in terms of full support. Comprehensive Mentoring goes beyond tutoring. It provides structured academic guidance for all subjects, time-management strategies, emotional support, and continuous progress tracking. With subject experts, psychologists, and life coaches working together, we help students stay motivated, organized, and confident—unlocking their true potential and preparing them for success in both academics and life. The idea is that you don't have to run after different tutors for different subjects at different places. You get the complete solution at one place. For Parents: Secure Your Teenager's Academic Success +971 52 172 6677" },
+      { category: "Resources", detail: "https://www.coursera.org useful for online courses student can take. Preferably related to major so as to add into the college personal stetement. Try to take minimum of 2 courses to show interest." },
+      { category: "Resources", detail: "Unifrog is also a good source for online courses." },
+      { category: "Resources", detail: "College research guide from school: https://docs.google.com/spreadsheets/d/19HAUpIjLRpHFe05rBRusIVmKvBx4lsARVJ9_Lbqc3uc/edit" },
+      { category: "Counseling", detail: "Faraz, Veronica, Aisha, Hale, Ivy Central, Sage: all parent-recommended" },
+      { category: "Counseling", detail: "Global study uk Youmna +20 100 9681292" },
+      { category: "Counseling", detail: "IDP university agent Noor +971 4 344 6814" },
+      { category: "Counseling", detail: "Faraz : +971 56 334 7115 helps from A to Z whether counseling or tutoring or taking control of your student scheduling. Highly recommend starting maximum with him before course selection end of grade 10. A lot of DAA students go to him and he knows our system. Some even start with him in 9th grade" },
+      { category: "Counseling", detail: "Diana Benacerraf +58 4143226997" },
+      { category: "Counseling", detail: "Gulf uni support Veronica +58 570 7822 (used to be a DAA parent)" },
+      { category: "Counseling", detail: "Ola US & Canada +1(514) 791-5551" },
+      { category: "Counseling", detail: "UK counselor Aisha +44 7850 595216" },
+      { category: "Counseling", detail: "Hale education: https://join.haleeducation.com/" },
+      { category: "Counseling", detail: "Ivy central https://www.ivycentral.com/best-college-counseling-in-dubai/" },
+      { category: "Counseling", detail: "Sage college counseling https://www.sageeducation.ae/university-admissions-consulting" },
+      { category: "UCAS Notes", detail: "Create a personal email for ur student that both of you have access to so you can both check any UCAS related emails because your student may miss important information. Don't use the school e-mail for college applications." },
+      { category: "UCAS Notes", detail: "In August check the UCAS website for the submission deadlines and ask the school what their internal deadlines are." },
+      { category: "UCAS Notes", detail: "For October related applications usually the ucad deadline is October 15th make sure to ask school counselor when the DAA deadline is because they need time to review the UCAS application. 'The 15 October deadline is only for applications to most medicine, dentistry, veterinary medicine/science courses, as well as all courses at the universities of Oxford and Cambridge. Meeting the deadline means that your application will receive equal consideration from your chosen universities and colleges. You can still apply after the deadline, if the course has places available, but your application won't be guaranteed to get equal consideration.' (quoted from UCAS)" },
+      { category: "UCAS Notes", detail: "For general UCAS applications make sure to check when the equal consideration date is for January because anything submitted after equal consideration date may not be given a place. For example for class of 2026 the equal consideration date is January 14th even though the final January deadline is January 29th so anything submitted in between the 14th & 29th may not be considered by some of the universities." },
+      { category: "UCAS Notes", detail: "November predicts come out towards the end of November so make sure to ask counselor what the internal deadline is in order to be able to have all info reviewed and approved to be ready to have the predicts added by the counselor and then submitted before winter break to get out of the way before mocks." },
+      { category: "UCAS Notes", detail: "The UCAS process: Research Courses and Universities:Start by finding universities and courses that match your academic interests and qualifications. If you aren't applying for the October deadline, usually after October predicts u have an idea." },
+      { category: "UCAS Notes", detail: "The UCAS process: Register with UCAS: Create an account on the UCAS website to begin your application process. Make sure to use the DAA buzzword." },
+      { category: "UCAS Notes", detail: "The UCAS process: Complete the Application Form: Fill in all the required sections, including your personal information, educational history, and your chosen course and university options." },
+      { category: "UCAS Notes", detail: "The UCAS process: Write Your Personal Statement: This is a crucial part of your application where you explain why you want to study the chosen courses and why you are a suitable candidate. Check the website for personal statement requirements. Also try to get the personal statement edited and approved by your counselor before the internal deadline." },
+      { category: "UCAS Notes", detail: "The UCAS process: Obtain a Reference: You will need a reference from a teacher, advisor, or employer, which will be submitted through the UCAS system. For 2026 DAA puts one TLOR (teacher letter of recommendation)." },
+      { category: "UCAS Notes", detail: "The UCAS process: Pay and Submit Your Application: After completing all sections and uploading your reference, you must pay the application fee to officially submit your application before the specific deadline." },
+      { category: "UCAS Notes", detail: "The UCAS process: Track Your Application: Once submitted, you can monitor the status of your application and any responses from the universities using the UCAS Track system." },
+      { category: "UCAS Notes", detail: "After you submit your UCAS application, email your college counselor to review your application, add a reference and your predicted grades, and then send the complete application to UCAS on your behalf. You should submit your application to the school by their internal deadline to allow them sufficient time to complete these steps before the final UCAS deadline." },
+      { category: "Helpful Codes", detail: "Powerschool district code: QNNZ" },
+      { category: "Helpful Codes", detail: "DAA SAT code 52822" },
+      { category: "Helpful Codes", detail: "UCAS Buzzword: daa(date of graduation) for example for class of 2026 It is daa2026 so for class of 2027 it would be daa2027. U need It to connect your UCAS to the school." }
+    ];
+
+    function populateTable() {
+      const tbody = document.getElementById("info-table-body");
+      tips.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${row.category}</td><td>${row.detail}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    $(document).ready(function () {
+      buildTimeline();
+      populateTable();
+      $('#info-table').DataTable({
+		pageLength: 2000
+      });
+    });
+  </script>
+</body>
+</html>

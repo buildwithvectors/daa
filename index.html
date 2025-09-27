@@ -55,16 +55,23 @@
   </header>
 
   <main class="tabs">
-    <nav class="tabbar" role="tablist">
-      <a href="#timelines" id="tab-tl" class="active" role="tab" aria-controls="timelines" aria-selected="true">Timelines</a>
-      <a href="#calculator" id="tab-calc" role="tab" aria-controls="calculator" aria-selected="false">GPA Calculator</a>
-    </nav>
+	<nav class="tabbar" role="tablist">
+	  <a href="#timelines" id="tab-tl" class="active" role="tab" aria-controls="timelines" aria-selected="true">Timeline</a>
+	  <a href="#calculator" id="tab-calc" role="tab" aria-controls="calculator" aria-selected="false">GPA Calculator</a>
+	  <a href="#planner" id="tab-planner" role="tab" aria-controls="planner" aria-selected="false">IB Planner</a>
+	</nav>
+
     <section id="timelines" class="panel" role="tabpanel" aria-labelledby="tab-tl"></section>
     <section id="calculator" class="panel" role="tabpanel" aria-labelledby="tab-calc" hidden>
       <!-- Keep your calculator as-is in a separate file named calculator.html in the same folder. -->
       <div class="note">Your calculator opens below without any changes. Save your existing code as <code>calculator.html</code> in the same folder.</div>
       <iframe src="calculator.html" title="GPA Calculator"></iframe>
     </section>
+		<section id="planner" class="panel" role="tabpanel" aria-labelledby="tab-planner" hidden>
+	  <div class="note">This planner includes timeline + categorized table to help parents manage IB & college tasks.</div>
+	  <iframe src="planner.html" title="IB Planner"></iframe>
+	</section>
+
   </main>
 
   <script>
@@ -224,22 +231,38 @@
     }
 
     // Tabs
-    function setupTabs(){
-      const tabTl=document.getElementById('tab-tl');
-      const tabCalc=document.getElementById('tab-calc');
-      const pTl=document.getElementById('timelines');
-      const pCalc=document.getElementById('calculator');
-      function sel(which){
-        const tl = which==='tl';
-        tabTl.classList.toggle('active', tl);
-        tabCalc.classList.toggle('active', !tl);
-        pTl.hidden = !tl; pCalc.hidden = tl;
-        tabTl.setAttribute('aria-selected', tl);
-        tabCalc.setAttribute('aria-selected', !tl);
-      }
-      tabTl.addEventListener('click', e=>{e.preventDefault(); sel('tl')});
-      tabCalc.addEventListener('click', e=>{e.preventDefault(); sel('calc')});
-    }
+function setupTabs(){
+  const tabTl = document.getElementById('tab-tl');
+  const tabCalc = document.getElementById('tab-calc');
+  const tabPlanner = document.getElementById('tab-planner');
+
+  const pTl = document.getElementById('timelines');
+  const pCalc = document.getElementById('calculator');
+  const pPlanner = document.getElementById('planner');
+
+  function sel(which){
+    const showTl = which === 'tl';
+    const showCalc = which === 'calc';
+    const showPlanner = which === 'planner';
+
+    tabTl.classList.toggle('active', showTl);
+    tabCalc.classList.toggle('active', showCalc);
+    tabPlanner.classList.toggle('active', showPlanner);
+
+    pTl.hidden = !showTl;
+    pCalc.hidden = !showCalc;
+    pPlanner.hidden = !showPlanner;
+
+    tabTl.setAttribute('aria-selected', showTl);
+    tabCalc.setAttribute('aria-selected', showCalc);
+    tabPlanner.setAttribute('aria-selected', showPlanner);
+  }
+
+  tabTl.addEventListener('click', e => { e.preventDefault(); sel('tl'); });
+  tabCalc.addEventListener('click', e => { e.preventDefault(); sel('calc'); });
+  tabPlanner.addEventListener('click', e => { e.preventDefault(); sel('planner'); });
+}
+
 
     document.addEventListener('DOMContentLoaded', ()=>{
       buildTimeline();

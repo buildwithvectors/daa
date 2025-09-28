@@ -64,11 +64,11 @@
     <section id="timelines" class="panel" role="tabpanel" aria-labelledby="tab-tl"></section>
     <section id="calculator" class="panel" role="tabpanel" aria-labelledby="tab-calc" hidden>
       <!-- Keep your calculator as-is in a separate file named calculator.html in the same folder. -->
-      <div class="note">Your calculator opens below without any changes. Save your existing code as <code>calculator.html</code> in the same folder.</div>
+      <div class="note"></div>
       <iframe src="calculator.html" title="GPA Calculator"></iframe>
     </section>
 		<section id="planner" class="panel" role="tabpanel" aria-labelledby="tab-planner" hidden>
-	  <div class="note">This planner includes timeline + categorized table to help parents manage IB & college tasks.</div>
+	  <div class="note"></div>
 	  <iframe src="planner.html" title="IB Planner"></iframe>
 	</section>
 
@@ -92,14 +92,27 @@
     ];
 
     // Helpers
-    function monthKey(dt){ return dt.toISOString().slice(0,7); }
-    function fmtSingle(dateStr){
-      const d = new Date(dateStr+'T00:00:00');
-      return d.toLocaleDateString(undefined,{month:'long', day:'numeric'}); // April 29
-    }
+//    function monthKey(dt){ return dt.toISOString().slice(0,7); }
+   // function fmtSingle(dateStr){
+    //  const d = new Date(dateStr+'T00:00:00');
+    //  return d.toLocaleDateString(undefined,{month:'long', day:'numeric'}); // April 29
+   // }
+	
+	function monthKey(dt){ 
+  // Use local date methods instead of UTC
+  const year = dt.getFullYear();
+  const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+  return `${year}-${month}`;
+}
+function fmtSingle(dateStr){
+  const d = new Date(dateStr);
+  return d.toLocaleDateString(undefined,{month:'long', day:'numeric'});
+}
     function fmtRange(s,e){
-      const ds = new Date(s+'T00:00:00');
-      const de = new Date(e+'T00:00:00');
+	  const ds = new Date(s);
+      const de = new Date(e);
+     // const ds = new Date(s+'T00:00:00');
+      //const de = new Date(e+'T00:00:00');
       const sameDay = ds.getTime()===de.getTime();
       if(sameDay) return fmtSingle(s);
       const sameMonth = ds.getFullYear()===de.getFullYear() && ds.getMonth()===de.getMonth();
@@ -131,15 +144,20 @@
       {title:'Islamic New Year', start:'2026-06-16', end:'2026-06-16', type:'general'},
       {title:'HS End of Year Exams', start:'2026-06-08', end:'2026-06-19', type:'general'},
       {title:'Last day of school (noon dismissal)', start:'2026-07-03', end:'2026-07-03', type:'general'},
+     
 
       // IB
+	  
+	  {title: 'CAS Submission & Final IA Work', start:'2026-03-15', end:'2026-03-15', type:'IB'  },
+	   {title: 'UCAS Equal Consideration Closes', start:'2026-01-14', end:'2026-01-14', type:'IB'  },
+	  {title: 'UCAS Final January Deadline', start:'2026-01-29', end:'2026-01-29', type:'IB'  },	 
       {title:'IB Y1 HL Week & IB Y2 Mock Exams', start:'2026-01-19', end:'2026-01-30', type:'IB'},
       {title:'HS & AP Semester 1 Exams', start:'2026-01-23', end:'2026-01-30', type:'IB'},
       {title:'IB Exams', start:'2026-04-24', end:'2026-05-20', type:'IB'},
       {title:'AP Exams TBC', start:'2026-05-04', end:'2026-05-22', type:'IB'},
+	  {title: 'EE Final Due', start:'2025-10-01', end:'2025-10-01', type:'IB'  },
       {title:'EE — Extended Essay', start:'2025-10-23', end:'2025-10-23', type:'IB'},
       {title:'TOK — Essay', start:'2026-02-12', end:'2026-02-12', type:'IB'},
-      {title:'CAS', start:'2026-03-15', end:'2026-03-15', type:'IB'},
     ];
 
     function buildTimeline(){

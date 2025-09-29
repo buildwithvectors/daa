@@ -3,82 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DAA — Important Info</title>
+  <title>DAA — Important Info (Rows = Months, Columns = Categories)</title>
   <style>
     :root{
-      --bg:#f7f7f9; --card:#fff; --text:#111; --muted:#666; --border:#e5e7eb; --accent:#0f62fe;
+      --bg:#f7f7f9; --card:#fff; --text:#111; --muted:#6b7280; --border:#e5e7eb; --accent:#0f62fe;
+      --c-ib:#2563eb; --c-ap:#0d9488; --c-college:#7c3aed; --c-test:#ea580c; --c-school:#16a34a; --c-general:#6b7280;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:var(--bg);color:var(--text)}
     header{padding:20px 16px;text-align:center}
     h1{margin:0 0 6px;font-size:22px}
-    .tabs{max-width:1100px;margin:0 auto;padding:0 12px 28px}
-    .tabbar{display:flex;gap:8px;border-bottom:1px solid var(--border);}
+
+    .tabs{max-width:1200px;margin:0 auto;padding:0 12px 28px}
+    .tabbar{display:flex;gap:8px;border-bottom:1px solid var(--border)}
     .tabbar a{padding:10px 12px;border:1px solid var(--border);border-bottom:0;background:var(--card);border-top-left-radius:10px;border-top-right-radius:10px;text-decoration:none;color:var(--text)}
     .tabbar a.active{background:var(--accent);color:#fff;border-color:var(--accent)}
     .panel{background:var(--card);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:14px}
-    .legend{display:none}
-    .legend .chip{display:inline-flex;gap:6px;align-items:center}
-    .legend .dot{width:10px;height:10px;border-radius:999px;display:inline-block;border:1px solid rgba(0,0,0,.1)}
 
-    /* timeline */
-    .timeline{margin:18px 0 28px}
-    .timeline h2{font-size:16px;margin:0 0 8px}
-    .months{display:grid;gap:8px;align-items:start}
-    /* 10 months Oct 2025 → Jul 2026 */
-    .months{grid-template-columns:repeat(10,minmax(90px,1fr))}
-    .month{position:relative;border:1px solid var(--border);border-radius:10px;padding:10px}
-    .month .head{font-size:12px;font-weight:700;margin-bottom:8px;padding:4px 6px;border-radius:6px;color:#111;background:#eee;display:inline-block}
-    .axis{height:2px;background:#111;opacity:.6;position:absolute;left:8px;right:8px;top:32px}
-    .event{background:#fff;border:1px solid var(--border);border-left-width:6px;border-radius:8px;padding:6px 8px;margin:6px 0;font-size:12px}
-    .event small{display:block;color:var(--muted)}
+    .disclaimer{max-width:1200px;margin:0 auto 10px;color:#b91c1c;background:#fff;border:1px solid #fecaca;border-radius:12px;padding:10px 12px}
+    .disclaimer a{color:var(--accent);text-decoration:underline}
 
-    .note{color:var(--muted);font-size:13px;margin-top:8px}
+    /* Grid: rows = months, columns = categories */
+    .grid{display:grid;gap:8px}
+    /* 1st col = month label, then 6 category columns */
+    .grid{grid-template-columns:160px repeat(6, minmax(150px,1fr))}
+    @media (max-width:1100px){.grid{grid-template-columns:120px repeat(3,1fr)} .hide-sm{display:none}}
+    @media (max-width:700px){.grid{grid-template-columns:110px repeat(2,1fr)} .hide-xs{display:none}}
+
+    .headcell{background:#f3f4f6;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:8px;padding:8px 10px;font-weight:800;font-size:12px}
+    .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .mcell{background:#e5efff;color:#111;font-weight:800;padding:8px 12px;border-radius:14px;font-size:13px}
+
+    .cell{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px;min-height:70px}
+    .empty{color:var(--muted);font-size:12px}
+    .item{display:flex;gap:8px;margin:6px 0}
+    .bar{width:4px;border-radius:4px}
+    .title{font-size:13px;font-weight:650;line-height:1.25}
+    .date{font-size:12px;color:var(--muted)}
+    .section-title{margin:6px 0 12px;font-size:16px}
+
+    .info{margin-top:18px}
+    .info h3{margin:0 0 10px;font-size:16px}
+    .info table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
+    .info thead th{background:#f3f4f6;color:#374151;font-weight:600;padding:10px 12px;text-align:left}
+    .info tbody td,.info tbody th{padding:12px;border-top:1px solid #e5e7eb;vertical-align:top;text-align:left}
+    .info tbody th{width:280px;color:#374151;background:#fafafa}
+    .info a.btn{display:inline-block;padding:8px 10px;border:1px solid var(--border);border-radius:10px;text-decoration:none}
+    .info a.btn:hover{border-color:var(--accent)}
+    .tz{color:#dc2626;font-weight:800}
     iframe{width:100%;height:80vh;border:0;border-radius:12px}
-    @media (max-width:900px){.months{grid-template-columns:repeat(5,1fr)}}
-  .info{margin-top:18px}
-.info h3{margin:0 0 10px;font-size:16px}
-.info table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.info thead th{background:#f3f4f6;color:#374151;font-weight:600;padding:10px 12px;text-align:left}
-.info tbody td,.info tbody th{padding:12px;border-top:1px solid #e5e7eb;vertical-align:top;text-align:left}
-.info tbody th{width:280px;color:#374151;background:#fafafa}
-.info a.btn{display:inline-block;padding:8px 10px;border:1px solid var(--border);border-radius:10px;text-decoration:none}
-.info a.btn:hover{border-color:var(--accent)}
-.tz{color:#dc2626;font-weight:800}
-.disclaimer{max-width:1100px;margin:0 auto 10px;color:#b91c1c;background:#fff;border:1px solid #fecaca;border-radius:12px;padding:10px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.disclaimer a{color:var(--accent);text-decoration:underline}
   </style>
 </head>
 <body>
-  <header>
-    <h1>DAA — Important Info</h1>
-  </header>
+  <header><h1>DAA — Important Info</h1></header>
 
   <main class="tabs">
-	<nav class="tabbar" role="tablist">
-	  <a href="#timelines" id="tab-tl" class="active" role="tab" aria-controls="timelines" aria-selected="true">Timeline</a>
-	  <a href="#calculator" id="tab-calc" role="tab" aria-controls="calculator" aria-selected="false">GPA Calculator</a>
-	  <a href="#planner" id="tab-planner" role="tab" aria-controls="planner" aria-selected="false">IB Planner</a>
-	</nav>
+    <nav class="tabbar" role="tablist">
+      <a href="#timelines" id="tab-tl" class="active" role="tab" aria-controls="timelines" aria-selected="true">Timeline</a>
+      <a href="#calculator" id="tab-calc" role="tab" aria-controls="calculator" aria-selected="false">GPA Calculator</a>
+      <a href="#planner" id="tab-planner" role="tab" aria-controls="planner" aria-selected="false">IB Planner</a>
+    </nav>
 
     <section id="timelines" class="panel" role="tabpanel" aria-labelledby="tab-tl"></section>
+
     <section id="calculator" class="panel" role="tabpanel" aria-labelledby="tab-calc" hidden>
-      <!-- Keep your calculator as-is in a separate file named calculator.html in the same folder. -->
-      <div class="note"></div>
       <iframe src="calculator.html" title="GPA Calculator"></iframe>
     </section>
-		<section id="planner" class="panel" role="tabpanel" aria-labelledby="tab-planner" hidden>
-	  <div class="note"></div>
-	  <iframe src="planner.html" title="IB Planner"></iframe>
-	</section>
 
+    <section id="planner" class="panel" role="tabpanel" aria-labelledby="tab-planner" hidden>
+      <iframe src="planner.html" title="IB Planner"></iframe>
+    </section>
   </main>
 
   <script>
-    // Month palette (up to 12)
-    const monthColors = ['#60a5fa','#34d399','#fbbf24','#a78bfa','#f87171','#22c55e','#f472b6','#06b6d4','#f59e0b','#10b981','#ef4444','#0ea5e9'];
-    // Months covered: Oct 2025 → Jul 2026 (10 buckets)
     const months = [
+      {key:'2025-09', label:'Sep 2025'},
       {key:'2025-10', label:'Oct 2025'},
       {key:'2025-11', label:'Nov 2025'},
       {key:'2025-12', label:'Dec 2025'},
@@ -91,213 +90,205 @@
       {key:'2026-07', label:'Jul 2026'}
     ];
 
-    // Helpers
-//    function monthKey(dt){ return dt.toISOString().slice(0,7); }
-   // function fmtSingle(dateStr){
-    //  const d = new Date(dateStr+'T00:00:00');
-    //  return d.toLocaleDateString(undefined,{month:'long', day:'numeric'}); // April 29
-   // }
-	
-	function monthKey(dt){ 
-  // Use local date methods instead of UTC
-  const year = dt.getFullYear();
-  const month = (dt.getMonth() + 1).toString().padStart(2, '0');
-  return `${year}-${month}`;
-}
-function fmtSingle(dateStr){
-  const d = new Date(dateStr);
-  return d.toLocaleDateString(undefined,{month:'long', day:'numeric'});
-}
-    function fmtRange(s,e){
-	  const ds = new Date(s);
-      const de = new Date(e);
-     // const ds = new Date(s+'T00:00:00');
-      //const de = new Date(e+'T00:00:00');
-      const sameDay = ds.getTime()===de.getTime();
-      if(sameDay) return fmtSingle(s);
-      const sameMonth = ds.getFullYear()===de.getFullYear() && ds.getMonth()===de.getMonth();
-      if(sameMonth){
-        const monthName = ds.toLocaleDateString(undefined,{month:'long'});
-        return `${monthName} ${ds.getDate()} – ${de.getDate()}`; // April 2 – 5
-      }
-      const a = ds.toLocaleDateString(undefined,{month:'long', day:'numeric'});
-      const b = de.toLocaleDateString(undefined,{month:'long', day:'numeric'});
-      return `${a} – ${b}`; // April 24 – May 20
-    }
-
-    // Data (unchanged)
-    const items = [
-      // GENERAL
-      {title:'No School', start:'2025-10-13', end:'2025-10-15', type:'general'},
-      {title:'MS/HS PD (No School for MS/HS)', start:'2025-10-27', end:'2025-10-27', type:'general'},
-      {title:'HS/MS Parent Teacher Conference', start:'2025-11-24', end:'2025-11-24', type:'general'},
-      {title:'Thanksgiving (in School)', start:'2025-11-27', end:'2025-11-27', type:'general'},
-      {title:'National Day', start:'2025-12-02', end:'2025-12-03', type:'general'},
-      {title:'Winter Break (No School)', start:'2025-12-08', end:'2026-01-02', type:'general'},
-      {title:'HS PD (No School for HS)', start:'2026-02-09', end:'2026-02-09', type:'general'},
-      {title:'Start of Ramadan', start:'2026-02-18', end:'2026-02-18', type:'general'},
-      {title:'No School', start:'2026-02-19', end:'2026-02-20', type:'general'},
-      {title:'Spring Break', start:'2026-03-16', end:'2026-03-27', type:'general'},
-      {title:'Eid al Fitr', start:'2026-03-19', end:'2026-03-20', type:'general'},
-      {title:'Eid Al Adha', start:'2026-05-26', end:'2026-05-29', type:'general'},
-      {title:'Grade 12 Graduation', start:'2026-05-31', end:'2026-05-31', type:'general'},
-      {title:'Islamic New Year', start:'2026-06-16', end:'2026-06-16', type:'general'},
-      {title:'HS End of Year Exams', start:'2026-06-08', end:'2026-06-19', type:'general'},
-      {title:'Last day of school (noon dismissal)', start:'2026-07-03', end:'2026-07-03', type:'general'},
-     
-
-      // IB
-	  
-	  {title: 'CAS Submission & Final IA Work', start:'2026-03-15', end:'2026-03-15', type:'IB'  },
-	   {title: 'UCAS Equal Consideration Closes', start:'2026-01-14', end:'2026-01-14', type:'IB'  },
-	  {title: 'UCAS Final January Deadline', start:'2026-01-29', end:'2026-01-29', type:'IB'  },	 
-      {title:'IB Y1 HL Week & IB Y2 Mock Exams', start:'2026-01-19', end:'2026-01-30', type:'IB'},
-      {title:'HS & AP Semester 1 Exams', start:'2026-01-23', end:'2026-01-30', type:'IB'},
-      {title:'IB Exams', start:'2026-04-24', end:'2026-05-20', type:'IB'},
-      {title:'AP Exams TBC', start:'2026-05-04', end:'2026-05-22', type:'IB'},
-	  {title: 'EE Final Due', start:'2025-10-01', end:'2025-10-01', type:'IB'  },
-      {title:'EE — Extended Essay', start:'2025-10-23', end:'2025-10-23', type:'IB'},
-      {title:'TOK — Essay', start:'2026-02-12', end:'2026-02-12', type:'IB'},
+    const CATS = [
+      {key:'school',  label:'School Processes', color:getCSS('--c-school')},
+      {key:'ib',      label:'IB Internal',      color:getCSS('--c-ib')},
+      {key:'ap',      label:'AP',               color:getCSS('--c-ap'), class:'hide-xs'},
+      {key:'college', label:'College Applications', color:getCSS('--c-college')},
+      {key:'test',    label:'Tests',            color:getCSS('--c-test'), class:'hide-sm'},
+      {key:'general', label:'General',          color:getCSS('--c-general'), class:'hide-sm'}
     ];
 
-    function buildTimeline(){
-      const root = document.getElementById('timelines');
+    function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+    function monthKey(dt){ const y=dt.getFullYear(); const m=String(dt.getMonth()+1).padStart(2,'0'); return `${y}-${m}`; }
+    function fmtSingle(dateStr){ const d=new Date(dateStr); return d.toLocaleDateString(undefined,{month:'long', day:'numeric'}); }
+    function fmtRange(s,e){
+      const ds=new Date(s), de=new Date(e);
+      if(ds.getTime()===de.getTime()) return fmtSingle(s);
+      const sameM=ds.getFullYear()===de.getFullYear() && ds.getMonth()===de.getMonth();
+      if(sameM){ const m=ds.toLocaleDateString(undefined,{month:'long'}); return `${m} ${ds.getDate()} – ${de.getDate()}`; }
+      const a=ds.toLocaleDateString(undefined,{month:'long', day:'numeric'});
+      const b=de.toLocaleDateString(undefined,{month:'long', day:'numeric'});
+      return `${a} – ${b}`;
+    }
 
-      // Month color legend
-      const legend = document.createElement('div');
-      legend.className='legend';
-      months.forEach((m, i)=>{
-        const chip=document.createElement('span');
-        chip.className='chip';
-        chip.innerHTML=`<span class=\"dot\" style=\"background:${monthColors[i%12]}\"></span>${m.label}`;
-        legend.appendChild(chip);
+    const items = [
+      /* GENERAL */
+      {title:'No School', start:'2025-10-13', end:'2025-10-15', cat:'general'},
+      {title:'MS/HS PD (No School for MS/HS)', start:'2025-10-27', end:'2025-10-27', cat:'general'},
+      {title:'HS/MS Parent Teacher Conference', start:'2025-11-24', end:'2025-11-24', cat:'general'},
+      {title:'Thanksgiving (in School)', start:'2025-11-27', end:'2025-11-27', cat:'general'},
+      {title:'National Day', start:'2025-12-02', end:'2025-12-03', cat:'general'},
+      {title:'Winter Break (No School)', start:'2025-12-08', end:'2026-01-02', cat:'general'},
+      {title:'HS PD (No School for HS)', start:'2026-02-09', end:'2026-02-09', cat:'general'},
+      {title:'Start of Ramadan', start:'2026-02-18', end:'2026-02-18', cat:'general'},
+      {title:'No School', start:'2026-02-19', end:'2026-02-20', cat:'general'},
+      {title:'Spring Break', start:'2026-03-16', end:'2026-03-27', cat:'general'},
+      {title:'Eid al Fitr', start:'2026-03-19', end:'2026-03-20', cat:'general'},
+      {title:'Eid Al Adha', start:'2026-05-26', end:'2026-05-29', cat:'general'},
+      {title:'Grade 12 Graduation', start:'2026-05-31', end:'2026-05-31', cat:'general'},
+      {title:'Islamic New Year', start:'2026-06-16', end:'2026-06-16', cat:'general'},
+      {title:'HS End of Year Exams', start:'2026-06-08', end:'2026-06-19', cat:'general'},
+      {title:'Last day of school (noon dismissal)', start:'2026-07-03', end:'2026-07-03', cat:'general'},
+
+      /* IB + AP */
+      {title:'EE Final Due', start:'2025-10-01', end:'2025-10-01', cat:'ib'},
+      {title:'EE — Extended Essay', start:'2025-10-23', end:'2025-10-23', cat:'ib'},
+      {title:'October IB Predictions (early apps only)', start:'2025-10-01', end:'2025-10-31', cat:'ib'},
+      {title:'November IB Predictions (all students, inc. TOK/EE)', start:'2025-11-01', end:'2025-11-30', cat:'ib'},
+      {title:'TOK — Essay', start:'2026-02-12', end:'2026-02-12', cat:'ib'},
+      {title:'IB Y1 HL Week & IB Y2 Mock Exams', start:'2026-01-19', end:'2026-01-30', cat:'ib'},
+      {title:'HS & AP Semester 1 Exams', start:'2026-01-23', end:'2026-01-30', cat:'ib'},
+      {title:'CAS Submission & Final IA Work', start:'2026-03-15', end:'2026-03-15', cat:'ib'},
+      {title:'IB Exams', start:'2026-04-24', end:'2026-05-20', cat:'ib'},
+      {title:'AP Exams TBC', start:'2026-05-04', end:'2026-05-22', cat:'ap'},
+
+      /* Tests */
+      {title:'SAT Exam at DAA', start:'2025-10-01', end:'2025-10-31', cat:'test'},
+      {title:'SAT Exam at DAA', start:'2025-11-01', end:'2025-11-30', cat:'test'},
+      {title:'SAT Exam at DAA', start:'2025-12-01', end:'2025-12-31', cat:'test'},
+      {title:'SAT Exam at DAA', start:'2026-03-01', end:'2026-03-31', cat:'test'},
+      {title:'SAT Exam at DAA', start:'2026-05-01', end:'2026-05-31', cat:'test'},
+
+      /* College */
+      {title:'UK Oxbridge/Medicine/Dentistry/Vet due', start:'2025-10-15', end:'2025-10-15', cat:'college'},
+      {title:'Early Decision applications due', start:'2025-11-01', end:'2025-11-01', cat:'college'},
+      {title:'Early Action applications due', start:'2025-11-01', end:'2025-11-01', cat:'college'},
+      {title:'Canada priority applications', start:'2025-11-07', end:'2025-11-07', cat:'college'},
+      {title:'UC applications due', start:'2025-11-30', end:'2025-11-30', cat:'college'},
+      {title:'Netherlands selective programs due', start:'2025-12-01', end:'2025-12-01', cat:'college'},
+      {title:'Early Decision 2 applications due', start:'2026-01-01', end:'2026-01-05', cat:'college'},
+      {title:'UCAS applications due', start:'2026-01-14', end:'2026-01-14', cat:'college'},
+      {title:'Netherlands numerus fixus due', start:'2026-01-15', end:'2026-01-15', cat:'college'},
+      {title:'Canada regular applications due', start:'2026-01-15', end:'2026-01-15', cat:'college'},
+      {title:'Netherlands early deadline (non-selective)', start:'2026-04-01', end:'2026-04-01', cat:'college'},
+      {title:'National deadline to accept one offer', start:'2026-05-01', end:'2026-05-01', cat:'college'},
+      {title:'FAFSA due (USA citizens applying to USA)', start:'2026-06-30', end:'2026-06-30', cat:'college'},
+
+      /* School */
+      {title:'Senior Planning Night', start:'2025-09-01', end:'2025-09-30', cat:'school'},
+      {title:'Add Universities in Unifrog', start:'2025-09-01', end:'2025-09-30', cat:'school'},
+      {title:'Attend CREW Counselor Corner Assemblies', start:'2025-09-01', end:'2025-09-30', cat:'school'},
+      {title:'Read Newsletter', start:'2025-09-01', end:'2025-09-30', cat:'school'},
+      {title:'Request documents to be sent to universities', start:'2025-10-01', end:'2025-10-31', cat:'school'},
+      {title:'Request documents to be sent to universities', start:'2025-11-01', end:'2025-11-30', cat:'school'},
+      {title:'Request documents before Winter Break', start:'2025-12-01', end:'2025-12-20', cat:'school'},
+      {title:'Request documents to be sent to universities', start:'2026-01-01', end:'2026-01-31', cat:'school'},
+      {title:'Request mid-year/interim reports to universities', start:'2026-02-01', end:'2026-02-28', cat:'school'},
+      {title:'Start Senior Clearance', start:'2026-04-01', end:'2026-04-30', cat:'school'},
+      {title:'Complete IB Coordinator form for score sending (early July)', start:'2026-04-01', end:'2026-04-30', cat:'school'},
+      {title:'Complete Senior Clearance', start:'2026-05-01', end:'2026-05-31', cat:'school'},
+      {title:'Request final HS transcript (after graduation)', start:'2026-05-31', end:'2026-06-15', cat:'school'},
+      {title:'UAE attestation/equivalency begins (US diploma)', start:'2026-06-01', end:'2026-06-30', cat:'school'},
+      {title:'Official IB scores sent to universities (early July)', start:'2026-07-01', end:'2026-07-15', cat:'school'},
+      {title:'UAE attestation/equivalency begins (IB diploma)', start:'2026-07-15', end:'2026-08-31', cat:'school'}
+    ];
+
+    function buildHeaderRow(grid){
+      // blank header for month column
+      const blank=document.createElement('div');
+      blank.className='headcell';
+      blank.textContent='Month';
+      grid.appendChild(blank);
+      // category headers
+      CATS.forEach(c=>{
+        const hc=document.createElement('div');
+        hc.className='headcell ' + (c.class||'');
+        hc.innerHTML=`<span class="dot" style="background:${c.color}"></span>${c.label}`;
+        grid.appendChild(hc);
       });
-      // Add note above legend
+    }
+
+    function buildTimeline(){
+      const root=document.getElementById('timelines');
+
       const note=document.createElement('div');
       note.className='disclaimer';
-      note.innerHTML = `The information on this website was collaboratively compiled by parents, with thanks to Ms. Rania Mukhar. <br>For official dates and details, please always refer to the <a href="https://www.gemsaa-dubai.com/About-Us/Academic-Calendar" target="_blank" rel="noopener">DAA Official Calendar</a> and confirm with the appropriate school contacts.`;
+      note.innerHTML=`The information on this website was collaboratively compiled by parents, with thanks to Ms. Rania Mukhar.<br>For official dates and details, please refer to the <a href="https://www.gemsaa-dubai.com/About-Us/Academic-Calendar" target="_blank" rel="noopener">DAA Official Calendar</a>.`;
       root.appendChild(note);
 
-      root.appendChild(legend);
+      const title=document.createElement('div');
+      title.className='section-title';
+      title.textContent='Monthly rows × Category columns';
+      root.appendChild(title);
 
-      ['IB','general'].forEach(kind=>{
-        const section=document.createElement('section');
-        section.className='timeline';
-        section.innerHTML=`<h2>${kind==='IB'?'IB timeline':'General timeline'}</h2>`;
+      const grid=document.createElement('div'); grid.className='grid';
+      buildHeaderRow(grid);
 
-        const wrap=document.createElement('div');
-        wrap.className='months';
+      months.forEach(m=>{
+        // month label cell
+        const mcell=document.createElement('div'); mcell.className='mcell'; mcell.textContent=m.label;
+        grid.appendChild(mcell);
 
-        months.forEach((m, idx)=>{
-          const box=document.createElement('div');
-          box.className='month';
-          const head=document.createElement('div');
-          head.className='head';
-          head.style.background = monthColors[idx%12];
-          head.textContent=m.label;
-          box.appendChild(head);
+        // one cell per category
+        CATS.forEach(c=>{
+          const cell=document.createElement('div'); cell.className='cell ' + (c.class||'');
+          const inMonth = items
+            .filter(x => x.cat===c.key && monthKey(new Date(x.start))===m.key)
+            .sort((a,b)=> new Date(a.start) - new Date(b.start));
 
-          const list=document.createElement('div');
-          // Only place each item in its START month
-          const relevant = items.filter(x=>x.type===kind && monthKey(new Date(x.start+'T00:00:00'))===m.key);
-          relevant.forEach(r=>{
-            const el=document.createElement('div');
-            el.className='event';
-            el.style.borderLeftColor = monthColors[idx%12];
-            el.innerHTML = `<strong>${r.title}</strong><small>${fmtRange(r.start, r.end)}</small>`;
-            list.appendChild(el);
-          });
-
-          if(!list.children.length){
-            const empty=document.createElement('div');
-            empty.style.color='var(--muted)';
-            empty.style.fontSize='12px';
-            empty.textContent='—';
-            list.appendChild(empty);
+          if(!inMonth.length){
+            const empty=document.createElement('div'); empty.className='empty'; empty.textContent='—';
+            cell.appendChild(empty);
+          }else{
+            inMonth.forEach(r=>{
+              const div=document.createElement('div'); div.className='item';
+              div.innerHTML=`
+                <span class="bar" style="background:${c.color}"></span>
+                <div>
+                  <div class="title">${r.title}</div>
+                  <div class="date">${fmtRange(r.start,r.end)}</div>
+                </div>`;
+              cell.appendChild(div);
+            });
           }
-
-          box.appendChild(list);
-          wrap.appendChild(box);
+          grid.appendChild(cell);
         });
-        section.appendChild(wrap);
-        root.appendChild(section);
       });
 
-      // Important info table
-      const info = document.createElement('section');
-      info.className='info';
-      info.innerHTML = `
+      root.appendChild(grid);
+
+      const info=document.createElement('section'); info.className='info';
+      info.innerHTML=`
         <h3>Important information</h3>
         <table aria-label="Important information">
-          <thead>
-            <tr><th>Item</th><th>Details</th></tr>
-          </thead>
+          <thead><tr><th>Item</th><th>Details</th></tr></thead>
           <tbody>
             <tr>
               <th>Official May 2026 IB exam schedule</th>
-              <td>
-                <a class="btn" href="https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/may-2026-examination-schedule.pdf" target="_blank" rel="noopener">Open PDF</a>
-              </td>
+              <td><a class="btn" href="https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/may-2026-examination-schedule.pdf" target="_blank" rel="noopener">Open PDF</a></td>
             </tr>
             <tr>
               <th>Exam time zone</th>
-              <td>The IB divides schools into zones by local time. The Middle East is <span class="tz">Exam Zone B (also known as TZ2)</span>, covering Europe, Africa, and the Middle East.</td>
+              <td>The Middle East is <span class="tz">Exam Zone B (TZ2)</span>.</td>
             </tr>
-			   <tr>
-              <th>Powerschool district code</th>
-              <td>QNNZ</td>
-            </tr>
-						   <tr>
-              <th>DAA SAT code</th>
-              <td>52822</td>
-            </tr>
-						   <tr>
-              <th>UCAS Buzzword</th>
-              <td>daaYYYY, e.g., daa2026</td>
-            </tr>
+            <tr><th>Powerschool district code</th><td>QNNZ</td></tr>
+            <tr><th>DAA SAT code</th><td>52822</td></tr>
+            <tr><th>UCAS Buzzword</th><td>daaYYYY, e.g., daa2026</td></tr>
           </tbody>
         </table>`;
       root.appendChild(info);
     }
 
-    // Tabs
-function setupTabs(){
-  const tabTl = document.getElementById('tab-tl');
-  const tabCalc = document.getElementById('tab-calc');
-  const tabPlanner = document.getElementById('tab-planner');
+    function setupTabs(){
+      const tabTl=document.getElementById('tab-tl');
+      const tabCalc=document.getElementById('tab-calc');
+      const tabPlanner=document.getElementById('tab-planner');
+      const pTl=document.getElementById('timelines');
+      const pCalc=document.getElementById('calculator');
+      const pPlanner=document.getElementById('planner');
+      function sel(which){
+        const showTl=which==='tl', showCalc=which==='calc', showPlanner=which==='planner';
+        tabTl.classList.toggle('active',showTl); tabCalc.classList.toggle('active',showCalc); tabPlanner.classList.toggle('active',showPlanner);
+        pTl.hidden=!showTl; pCalc.hidden=!showCalc; pPlanner.hidden=!showPlanner;
+        tabTl.setAttribute('aria-selected',showTl); tabCalc.setAttribute('aria-selected',showCalc); tabPlanner.setAttribute('aria-selected',showPlanner);
+      }
+      tabTl.addEventListener('click',e=>{e.preventDefault(); sel('tl');});
+      tabCalc.addEventListener('click',e=>{e.preventDefault(); sel('calc');});
+      tabPlanner.addEventListener('click',e=>{e.preventDefault(); sel('planner');});
+    }
 
-  const pTl = document.getElementById('timelines');
-  const pCalc = document.getElementById('calculator');
-  const pPlanner = document.getElementById('planner');
-
-  function sel(which){
-    const showTl = which === 'tl';
-    const showCalc = which === 'calc';
-    const showPlanner = which === 'planner';
-
-    tabTl.classList.toggle('active', showTl);
-    tabCalc.classList.toggle('active', showCalc);
-    tabPlanner.classList.toggle('active', showPlanner);
-
-    pTl.hidden = !showTl;
-    pCalc.hidden = !showCalc;
-    pPlanner.hidden = !showPlanner;
-
-    tabTl.setAttribute('aria-selected', showTl);
-    tabCalc.setAttribute('aria-selected', showCalc);
-    tabPlanner.setAttribute('aria-selected', showPlanner);
-  }
-
-  tabTl.addEventListener('click', e => { e.preventDefault(); sel('tl'); });
-  tabCalc.addEventListener('click', e => { e.preventDefault(); sel('calc'); });
-  tabPlanner.addEventListener('click', e => { e.preventDefault(); sel('planner'); });
-}
-
-
-    document.addEventListener('DOMContentLoaded', ()=>{
-      buildTimeline();
-      setupTabs();
-    });
+    document.addEventListener('DOMContentLoaded', ()=>{ buildTimeline(); setupTabs(); });
   </script>
 </body>
 </html>
